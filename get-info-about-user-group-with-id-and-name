@@ -1,0 +1,32 @@
+#!/bin/bash
+## This script gets the details of the user and group to gets its name and ID for reconciliation
+
+## declare an array variable 
+declare -a usrngpname=("user1" "user2" "user3")
+declare -a usrngpid=(997 1001 33)
+declare -a usrngpdesc=("Group for user1" "Group for user2" "Group for user3")
+
+# get length of an array
+length=${#usrngpname[@]}
+
+# use C style for loop syntax to read all values and indexes
+for (( j=0; j<length; j++ ));
+do
+    printf "==================================\n"
+    printf "Current index %d with name %s and id %s\n" $j "${usrngpname[$j]}" "${usrngpid[$j]}"
+    printf "\n"
+                printf "Groups discovery via ID %s\n"  "${usrngpid[$j]}"
+                getent group "${usrngpid[$j]}"
+
+                printf "\n"
+                printf "Groups discovery via name %s\n" "${usrngpname[$j]}"
+                getent group "${usrngpname[$j]}"
+
+                printf "\n"
+                printf "User discovery via ID %s\n"  "${usrngpid[$j]}"
+                id "${usrngpid[$j]}"
+    
+                printf "\n"
+                printf "User discovery via name %s\n" "${usrngpname[$j]}"
+                id -u "${usrngpname[$j]}"            
+done
