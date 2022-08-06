@@ -14,21 +14,42 @@ declare -a usrngpid=(997 1001 33)
 # get length of an array
 length=${#usrngpname[@]}
 
+myrandom=$(date '+%Y-%m-%d-%H-%M-%S')
+mkdir -p /extensionlogs
+touch "/extensionlogs/customscript-${myrandom}.log"
+
+printf "Starting at $(date)" >> "/extensionlogs/customscript-${myrandom}.log"
+printf "\n" >> "/extensionlogs/customscript-${myrandom}.log"
+printf "current working directory: $(pwd)" >> "/extensionlogs/customscript-${myrandom}.log"
+printf "\n" >> "/extensionlogs/customscript-${myrandom}.log"
+
 # use C style for loop syntax to read all values and indexes
 for (( j=0; j<length; j++ ));
 do
-    printf "Current index %d with value %s\n" $j "${usrngpname[$j]}"
-    printf "Current index %d with value %s\n" $j "${usrngpid[$j]}"
+    printf "=======================================================" >> "/extensionlogs/customscript-${myrandom}.log"
+    printf "Current index %d with value %s\n" $j "${usrngpname[$j]}" >> "/extensionlogs/customscript-${myrandom}.log"
+    printf "\n" >> "/extensionlogs/customscript-${myrandom}.log"
+    printf "Current index %d with value %s\n" $j "${usrngpid[$j]}" >> "/extensionlogs/customscript-${myrandom}.log"
+    printf "\n" >> "/extensionlogs/customscript-${myrandom}.log"
 
     if id -u "${usrngpname[$j]}" >/dev/null 2>&1; then
-        echo "user exists"
-        groupmod -g "${usrngpid[$j]}" "${usrngpname[$j]}"
-        usermod -u "${usrngpid[$j]}" -g "${usrngpname[$j]}" "${usrngpname[$j]}"
-        id "${usrngpname[$j]}"
+        printf "user exists" >> "/extensionlogs/customscript-${myrandom}.log"
+        printf "\n" >> "/extensionlogs/customscript-${myrandom}.log"
+
+        groupmod -g "${usrngpid[$j]}" "${usrngpname[$j]}" >> "/extensionlogs/customscript-${myrandom}.log"
+        printf "\n" >> "/extensionlogs/customscript-${myrandom}.log"
+        usermod -u "${usrngpid[$j]}" -g "${usrngpname[$j]}" "${usrngpname[$j]}" >> "/extensionlogs/customscript-${myrandom}.log"
+        printf "\n" >> "/extensionlogs/customscript-${myrandom}.log"
+        id "${usrngpname[$j]}" >> "/extensionlogs/customscript-${myrandom}.log"
+        printf "\n" >> "/extensionlogs/customscript-${myrandom}.log"
     else
-        echo "user does not exist"
-        groupadd -g "${usrngpid[$j]}" "${usrngpname[$j]}"
-        useradd -m  -u "${usrngpid[$j]}"  -g "${usrngpname[$j]}" "${usrngpname[$j]}"
-        id "${usrngpname[$j]}"
+        printf "user does not exist" >> "/extensionlogs/customscript-${myrandom}.log"
+        printf "\n" >> "/extensionlogs/customscript-${myrandom}.log"
+        groupadd -g "${usrngpid[$j]}" "${usrngpname[$j]}" >> "/extensionlogs/customscript-${myrandom}.log"
+        printf "\n" >> "/extensionlogs/customscript-${myrandom}.log"
+        useradd -m  -u "${usrngpid[$j]}"  -g "${usrngpname[$j]}" "${usrngpname[$j]}" >> "/extensionlogs/customscript-${myrandom}.log" 
+        printf "\n" >> "/extensionlogs/customscript-${myrandom}.log"
+        id "${usrngpname[$j]}" >> "/extensionlogs/customscript-${myrandom}.log"
+        printf "\n" >> "/extensionlogs/customscript-${myrandom}.log"
     fi
 done
